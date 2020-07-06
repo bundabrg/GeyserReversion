@@ -18,10 +18,13 @@
 
 package au.com.grieve.edusupport;
 
-import org.geysermc.connector.plugin.annotations.Event;
+import org.geysermc.connector.event.annotations.Event;
+import org.geysermc.connector.event.events.PluginDisableEvent;
+import org.geysermc.connector.event.events.PluginEnableEvent;
+import org.geysermc.connector.plugin.GeyserPlugin;
+import org.geysermc.connector.plugin.PluginClassLoader;
+import org.geysermc.connector.plugin.PluginManager;
 import org.geysermc.connector.plugin.annotations.Plugin;
-import org.geysermc.connector.plugin.events.DisableEvent;
-import org.geysermc.connector.plugin.events.EnableEvent;
 
 @Plugin(
         name = "EduSupport",
@@ -29,15 +32,19 @@ import org.geysermc.connector.plugin.events.EnableEvent;
         authors = {"Bundabrg"},
         description = "Provides protocol support for Minecraft Educational Edition"
 )
-public class EduSupport {
+public class EduSupportPlugin extends GeyserPlugin {
+
+    public EduSupportPlugin(PluginManager pluginManager, PluginClassLoader pluginClassLoader) {
+        super(pluginManager, pluginClassLoader);
+    }
 
     @Event
-    public void onEnable(EnableEvent event) {
+    public void onEnable(PluginEnableEvent event) {
         System.err.println("I'm alive");
     }
 
     @Event
-    public void onDisable(DisableEvent event) {
+    public void onDisable(PluginDisableEvent event) {
         System.err.println("I'm dead");
     }
 }
