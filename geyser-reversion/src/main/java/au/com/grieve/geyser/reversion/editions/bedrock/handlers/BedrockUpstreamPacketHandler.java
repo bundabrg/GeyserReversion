@@ -20,24 +20,33 @@ package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
 import au.com.grieve.reversion.LoginData;
 import au.com.grieve.reversion.ReversionServerSession;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.packet.PlayStatusPacket;
 import com.nukkitx.protocol.bedrock.packet.ResourcePacksInfoPacket;
 import com.nukkitx.protocol.bedrock.packet.ServerToClientHandshakePacket;
+import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.network.BedrockProtocol;
 import org.geysermc.connector.network.UpstreamPacketHandler;
 import org.geysermc.connector.network.session.GeyserSession;
+import org.geysermc.connector.network.session.auth.AuthData;
+import org.geysermc.connector.network.session.auth.BedrockClientData;
 import org.geysermc.connector.utils.LanguageUtils;
 
+import java.util.UUID;
 
+
+@Getter
 public class BedrockUpstreamPacketHandler extends UpstreamPacketHandler {
     private final ReversionServerSession serverSession;
+    private final GeyserSession geyserSession;
 
     public BedrockUpstreamPacketHandler(ReversionServerSession serverSession, GeyserConnector connector, GeyserSession session) {
         super(connector, session);
         this.serverSession = serverSession;
+        this.geyserSession = session;
     }
 
     @Override
@@ -67,6 +76,17 @@ public class BedrockUpstreamPacketHandler extends UpstreamPacketHandler {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             session.getConnector().getLogger().error("Failed to encrypt connection", e);
         }
+
+        // Setup Session
+        JsonNode extraData = serverSession.getLoginData().getPayload().get("extraData");
+        geyserSession.setAuthenticationData(new AuthData(
+                extraData.get("displayName").asText(),
+                UUID.fromString(extraData.get("identity").asText()),
+                extraData.get("XUID").asText()
+        ));
+
+        serverSession.getLoginData();
+        session.setClientData(LoginData.JSON_MAPPER.convertValue(serverSession.getLoginData().getClientData(), BedrockClientData.class));
 
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
