@@ -1,11 +1,11 @@
-site_name: EduSupport
+site_name: GeyserReversion
 site_author: Bundabrg
-site_url: https://github.com/Bundabrg/EduSupport
+site_url: https://github.com/Bundabrg/GeyserReversion
 site_dir: build/docs
-repo_name: Bundabrg/EduSupport
-repo_url: https://github.com/Bundabrg/EduSupport
+repo_name: Bundabrg/GeyserReversion
+repo_url: https://github.com/Bundabrg/GeyserReversion
 edit_uri: ""
-copyright: 'Copyright (C) 2020 EduSupport Developers'
+copyright: 'Copyright (C) 2020 GeyserReversion Developers'
 
 extra_css:
   - 'css/mkpdf.css'
@@ -59,13 +59,13 @@ plugins:
   - exclude:
       glob:
         - 'theme/*'
-  - git-revision-date-localized:
-      type: timeago
-  - mkpdfs:
-      author: EduSupport Developers
-      toc_title: Table of contents
-      output_path: pdf/documentation.pdf
-      design: docs/css/pdf.css
+#  - git-revision-date-localized:
+#      type: timeago
+#  - mkpdfs:
+#      author: GeyserReversion Developers
+#      toc_title: Table of contents
+#      output_path: pdf/documentation.pdf
+#      design: docs/css/pdf.css
 
 # Discord not yet supported but it will be soon
 #extra:

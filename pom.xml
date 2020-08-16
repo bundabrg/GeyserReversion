@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ EduSupport - Minecraft Educational Support for Geyser
-  ~ Copyright (C) 2020 EduSupport Developers
+  ~ EduSupport - Minecraft Protocol Support for MultiVersion in Geyser
+  ~ Copyright (C) 2020 GeyserReversion Developers
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -22,14 +22,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>au.com.grieve.edusupport</groupId>
-    <artifactId>EduSupport</artifactId>
+    <groupId>au.com.grieve.geyser.reversion</groupId>
+    <artifactId>parent</artifactId>
     <version>1.1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>geyser-reversion</module>
+    </modules>
+    <packaging>pom</packaging>
 
-    <name>EduSupport</name>
+    <name>GeyserReversion</name>
 
-    <description>Provides support for Minecraft Education Edition in Geyser</description>
+    <description>Provides Protocol Support for MultiVersion in Geyser</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,30 +45,21 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
+
                 <configuration>
+                    <!--                    <forceJavacCompilerUse>true</forceJavacCompilerUse>-->
                     <source>11</source>
                     <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>au.com.grieve.bcf</pattern>
-                            <shadedPattern>${project.groupId}.${project.artifactId}.bcf</shadedPattern>
-                        </relocation>
-                    </relocations>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>dat</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
         </plugins>
@@ -105,14 +99,8 @@
             <version>1.18.2</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Geyser -->
-        <dependency>
-            <groupId>org.geysermc</groupId>
-            <artifactId>connector</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
+
 
     <distributionManagement>
         <repository>

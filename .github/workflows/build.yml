@@ -38,18 +38,18 @@ jobs:
           mvn -B versions:set -DnewVersion=${MAVEN_VERSION}
 
           # Set Plugin Version
-          sed -i "/version = .*/ s/version = \"[^\"]*\"/version = \"${MAVEN_VERSION}\"/" src/main/java/au/com/grieve/edusupport/EduSupport.java
+          sed -i "/version = .*/ s/version = \"[^\"]*\"/version = \"${MAVEN_VERSION}\"/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionPlugin.java
 
       - name: Update Version for Developmental Build
         if: "!startsWith(github.ref,'refs/tags/v')"
         run: |
-          sed -i "/version = .*/ s/-dev/-b${GITHUB_RUN_NUMBER}/" src/main/java/au/com/grieve/edusupport/EduSupport.java
+          sed -i "/version = .*/ s/-dev/-b${GITHUB_RUN_NUMBER}/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionPlugin.java
 
       - name: Build with Maven
         run: |
           mkdir -p build/output
           mvn -B package --file pom.xml && \
-            cp target/EduSupport-*.jar build/output/
+            cp target/GeyserReversion-*.jar build/output/
 
       - name: Publish to Maven Repo
         if: (github.ref == 'refs/heads/master' || startsWith(github.ref,'refs/tags/v'))
@@ -134,7 +134,7 @@ jobs:
           for asset in ./build/binary/*.jar; do
             assets+=("-a" "$asset")
           done
-          assets+=("-a" "build/docs/pdf/documentation.pdf#EduSupport-Documentation.pdf")
+          assets+=("-a" "build/docs/pdf/documentation.pdf#GeyserReversion-Documentation.pdf")
 
           tag_name="${GITHUB_REF##*/}"
           hub release create \
@@ -143,7 +143,7 @@ jobs:
             "$tag_name" << EOF
           Release $tag_name
 
-          [Online Documentation](https://bundabrg.github.io/EduSupport)
+          [Online Documentation](https://bundabrg.github.io/GeyserReversion)
 
           Since Last Release:
           $(git log $(git describe --tags --abbrev=0 HEAD^ 2> /dev/null || git rev-list --max-parents=0 HEAD)..HEAD --graph --pretty=format:'%h %d %s [%an]' --abbrev-commit)
