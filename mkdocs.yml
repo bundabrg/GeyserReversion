@@ -75,4 +75,5 @@ plugins:
 
 nav:
   - Introduction: index.md
+  - Configuration: config.md
   - Contributing: contributing.md

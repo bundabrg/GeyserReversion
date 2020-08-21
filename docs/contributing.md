@@ -4,7 +4,7 @@ Here are some ways that you can help contribute to this project.
 
 ## New ideas or Bug Reports
 
-Need something? Found a bug? Or just have a brilliant idea? Head to the [Issues](https://github.com/Bundabrg/EduSupport/issues) and create new one.
+Need something? Found a bug? Or just have a brilliant idea? Head to the [Issues](https://github.com/Bundabrg/GeyserReversion/issues) and create new one.
 
 ## Contributing Code
 
@@ -13,8 +13,8 @@ If you know Java then take a look at open issues and create a pull request.
 Do the following to build the code:
 
 ```shell
-git clone https://github.com/Bundabrg/EduSupport
-cd EduSupport
+git clone https://github.com/Bundabrg/GeyserReversion
+cd GeyserReversion
 mvn clean package
 ```
 
