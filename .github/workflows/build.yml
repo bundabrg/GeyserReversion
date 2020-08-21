@@ -134,7 +134,7 @@ jobs:
           for asset in ./build/binary/*.jar; do
             assets+=("-a" "$asset")
           done
-          assets+=("-a" "build/docs/pdf/documentation.pdf#GeyserReversion-Documentation.pdf")
+          #assets+=("-a" "build/docs/pdf/documentation.pdf#GeyserReversion-Documentation.pdf")
 
           tag_name="${GITHUB_REF##*/}"
           hub release create \
