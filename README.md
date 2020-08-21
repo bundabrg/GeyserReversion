@@ -53,4 +53,5 @@ where your Geyser.jar file is located.
 [11:08:37 DEBUG] {GeyserReversion} Registered Translator: Translator_v390ee_to_v408be
 ```
 
- 
+ 4. If using `education` you will need to generate a token for each tenancy that you support otherwise you'll get a 
+ "School not allowed" error. See [education docs](https://bundabrg.github.io/GeyserReversion/education/) for more info

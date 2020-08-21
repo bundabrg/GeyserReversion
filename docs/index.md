@@ -26,10 +26,10 @@ where your Geyser.jar file is located.
 
 3. Start Geyser. It should show some indication that GeyserReversion is running. For example:
 
-```
-[11:08:37 INFO] {GeyserReversion} EducationServer listening on /0.0.0.0:19133
-[11:08:37 DEBUG] {GeyserReversion} Registered Translator: Translator_v390ee_to_v408be
-```
+    ```
+    [11:08:37 INFO] {GeyserReversion} EducationServer listening on /0.0.0.0:19133
+    [11:08:37 DEBUG] {GeyserReversion} Registered Translator: Translator_v390ee_to_v408be
+    ```
 
 4. If using `education` you will need to generate a token for each tenancy that you support otherwise you'll get a 
 "School not allowed" error. See [education docs](education.md) for more info
