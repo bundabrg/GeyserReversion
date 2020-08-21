@@ -76,4 +76,5 @@ plugins:
 nav:
   - Introduction: index.md
   - Configuration: config.md
+  - Education: education.md
   - Contributing: contributing.md
