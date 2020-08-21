@@ -58,7 +58,7 @@ public class EducationEdition implements Edition {
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         plugin.getLogger().info("EducationServer listening on " + address.toString());
-        ReversionServer server = new EducationReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion(), tokenManager, address);
+        ReversionServer server = new EducationReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
         return server;
     }

@@ -36,7 +36,7 @@ public class BedrockEdition implements Edition {
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         plugin.getLogger().info("BedrockServer listening on " + address.toString());
-        ReversionServer server = new BedrockReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion(), address);
+        ReversionServer server = new BedrockReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
         return server;
     }
