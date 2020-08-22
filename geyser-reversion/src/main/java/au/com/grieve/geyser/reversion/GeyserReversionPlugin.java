@@ -38,11 +38,12 @@ import org.geysermc.connector.plugin.annotations.Plugin;
 import org.geysermc.connector.utils.LanguageUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,9 +115,12 @@ public class GeyserReversionPlugin extends GeyserPlugin {
             //noinspection ResultOfMethodCallIgnored
             configFile.getParentFile().mkdirs();
 
-            try (FileOutputStream fos = new FileOutputStream(configFile);
-                 InputStream fis = getResourceAsStream("config.yml")) {
-                fis.transferTo(fos);
+            try (InputStream fis = getResourceAsStream("config.yml")) {
+                Files.copy(
+                        fis,
+                        configFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
