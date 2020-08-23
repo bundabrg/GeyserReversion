@@ -41,25 +41,31 @@
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
             <artifactId>translator-v390ee_to_v408be</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.grieve.reversion</groupId>
+            <artifactId>translator-v409be_to_v408be</artifactId>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
             <artifactId>edition-education</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
             <artifactId>edition-bedrock</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
