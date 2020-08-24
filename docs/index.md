@@ -9,8 +9,14 @@ allow any supported version to connect to any supported Geyser.
 * Multiversion Support - As more versions of an edition become available they can be added
 
 ## Client Versions Supported
-* Minecraft Education v1.14.31
+
+### Minecraft Bedrock
 * Minecraft Bedrock v1.16.2
+* Minecraft Bedrock v1.16.100.50 (beta)
+* Minecraft Bedrock v1.16.100.52 (beta)
+
+### Minecraft Education
+* Minecraft Education v1.14.31
 
 ## Server Versions Support
 * Geyser Bedrock v1.16.2

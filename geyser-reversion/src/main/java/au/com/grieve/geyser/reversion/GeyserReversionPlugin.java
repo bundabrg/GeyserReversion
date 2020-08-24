@@ -27,6 +27,7 @@ import au.com.grieve.reversion.api.BaseTranslator;
 import au.com.grieve.reversion.api.TranslatorException;
 import au.com.grieve.reversion.translators.v390ee_to_v408be.Translator_v390ee_to_v408be;
 import au.com.grieve.reversion.translators.v409be_to_v408be.Translator_v409be_to_v408be;
+import au.com.grieve.reversion.translators.v411be_to_v409be.Translator_v411be_to_v409be;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
@@ -89,6 +90,7 @@ public class GeyserReversionPlugin extends GeyserPlugin {
     private void registerTranslators() {
         registerTranslator(Translator_v390ee_to_v408be.class);
         registerTranslator(Translator_v409be_to_v408be.class);
+        registerTranslator(Translator_v411be_to_v409be.class);
     }
 
 
