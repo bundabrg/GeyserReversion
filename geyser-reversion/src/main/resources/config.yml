@@ -1,5 +1,5 @@
 # Edition supported. One of [bedrock, education]. Default: bedrock
-edition: education
+edition: bedrock
 
 # Don't touch
 version: 1
