@@ -18,8 +18,9 @@
 
 package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
-import au.com.grieve.reversion.LoginData;
-import au.com.grieve.reversion.ReversionServerSession;
+import au.com.grieve.reversion.api.LoginData;
+import au.com.grieve.reversion.api.ReversionSession;
+import au.com.grieve.reversion.exceptions.LoginException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
@@ -40,10 +41,10 @@ import java.util.UUID;
 
 @Getter
 public class BedrockUpstreamPacketHandler extends UpstreamPacketHandler {
-    private final ReversionServerSession serverSession;
+    private final ReversionSession serverSession;
     private final GeyserSession geyserSession;
 
-    public BedrockUpstreamPacketHandler(ReversionServerSession serverSession, GeyserConnector connector, GeyserSession session) {
+    public BedrockUpstreamPacketHandler(ReversionSession serverSession, GeyserConnector connector, GeyserSession session) {
         super(connector, session);
         this.serverSession = serverSession;
         this.geyserSession = session;
@@ -72,7 +73,7 @@ public class BedrockUpstreamPacketHandler extends UpstreamPacketHandler {
             ServerToClientHandshakePacket packet = new ServerToClientHandshakePacket();
             packet.setJwt(serverSession.getLoginData().getHandshakeJwt().serialize());
             session.sendUpstreamPacketImmediately(packet);
-        } catch (LoginData.LoginException e) {
+        } catch (LoginException e) {
             session.disconnect("disconnectionScreen.internalError.cantConnect");
             session.getConnector().getLogger().error("Failed to encrypt connection", e);
         }

@@ -18,7 +18,7 @@
 
 package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
-import au.com.grieve.reversion.ReversionServerSession;
+import au.com.grieve.reversion.api.ReversionSession;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
@@ -37,6 +37,6 @@ public class BedrockServerEventHandler extends ConnectorServerEventHandler {
     @Override
     public void onSessionCreation(BedrockServerSession bedrockServerSession) {
         bedrockServerSession.setLogging(true);
-        bedrockServerSession.setPacketHandler(new BedrockUpstreamPacketHandler((ReversionServerSession) bedrockServerSession, this.connector, new GeyserSession(this.connector, bedrockServerSession)));
+        bedrockServerSession.setPacketHandler(new BedrockUpstreamPacketHandler((ReversionSession) bedrockServerSession, this.connector, new GeyserSession(this.connector, bedrockServerSession)));
     }
 }

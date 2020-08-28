@@ -21,7 +21,7 @@ package au.com.grieve.geyser.reversion.editions.education;
 import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEventHandler;
 import au.com.grieve.geyser.reversion.editions.education.commands.EducationCommand;
-import au.com.grieve.reversion.ReversionServer;
+import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.editions.education.EducationReversionServer;
 import au.com.grieve.reversion.editions.education.utils.TokenManager;
 import lombok.Getter;

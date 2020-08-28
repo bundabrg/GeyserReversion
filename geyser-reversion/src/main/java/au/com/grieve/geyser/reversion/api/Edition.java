@@ -18,7 +18,8 @@
 
 package au.com.grieve.geyser.reversion.api;
 
-import au.com.grieve.reversion.ReversionServer;
+
+import au.com.grieve.reversion.api.ReversionServer;
 
 import java.net.InetSocketAddress;
 

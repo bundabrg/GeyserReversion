@@ -58,6 +58,12 @@
         </dependency>
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
+            <artifactId>translator-v412be_to_v411be</artifactId>
+            <version>${reversion.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.grieve.reversion</groupId>
             <artifactId>common</artifactId>
             <version>${reversion.version}</version>
             <scope>compile</scope>
@@ -72,6 +78,32 @@
             <groupId>au.com.grieve.reversion</groupId>
             <artifactId>edition-bedrock</artifactId>
             <version>${reversion.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Protocol Stuff -->
+        <dependency>
+            <groupId>com.nukkitx.protocol</groupId>
+            <artifactId>education-v390</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nukkitx.protocol</groupId>
+            <artifactId>bedrock-v409</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nukkitx.protocol</groupId>
+            <artifactId>bedrock-v411</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nukkitx.protocol</groupId>
+            <artifactId>bedrock-v412</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -90,20 +122,42 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>au.com.grieve.reversion:*</include>
+                                    <include>com.nukkitx.protocol:education-v390</include>
+                                    <include>com.nukkitx.protocol:bedrock-v409</include>
+                                    <include>com.nukkitx.protocol:bedrock-v411</include>
+                                    <include>com.nukkitx.protocol:bedrock-v412</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <!--                <relocations>-->
-                    <!--                    <relocation>-->
-                    <!--                        <pattern>com.nukkitx.protocol.bedrock.v363</pattern>-->
-                    <!--                        <shadedPattern>${project.groupId}.${project.artifactId}.v363</shadedPattern>-->
-                    <!--                    </relocation>-->
-                    <!--                </relocations>-->
-                    <artifactSet>
-                        <excludes>
-                            <exclude>it.unimi.dsi.fastutil:*</exclude>
-                        </excludes>
-                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.nukkitx.protocol.education.v390</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.nukkitx.protocol.education.v390
+                            </shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.nukkitx.protocol.bedrock.v409</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.nukkitx.protocol.bedrock.v409
+                            </shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.nukkitx.protocol.bedrock.v411</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.nukkitx.protocol.bedrock.v411
+                            </shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.nukkitx.protocol.bedrock.v412</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.nukkitx.protocol.bedrock.v412
+                            </shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
         </plugins>
