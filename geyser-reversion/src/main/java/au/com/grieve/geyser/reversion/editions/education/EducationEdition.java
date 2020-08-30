@@ -28,24 +28,24 @@ import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
 import org.geysermc.connector.event.events.geyser.GeyserStartEvent;
+import org.geysermc.connector.extension.GeyserExtension;
 import org.geysermc.connector.network.BedrockProtocol;
-import org.geysermc.connector.plugin.GeyserPlugin;
 
 import java.io.File;
 import java.net.InetSocketAddress;
 
 @Getter
 public class EducationEdition implements Edition {
-    private final GeyserPlugin plugin;
+    private final GeyserExtension extension;
     private final TokenManager tokenManager;
 
-    public EducationEdition(GeyserPlugin plugin) {
-        this.plugin = plugin;
+    public EducationEdition(GeyserExtension extension) {
+        this.extension = extension;
 
-        this.tokenManager = new TokenManager(new File(plugin.getDataFolder(), "tokens.yml"));
+        this.tokenManager = new TokenManager(new File(extension.getDataFolder(), "tokens.yml"));
 
         // Register Events
-        plugin.registerEvents(this);
+        extension.registerEvents(this);
     }
 
     @GeyserEventHandler
@@ -57,7 +57,7 @@ public class EducationEdition implements Edition {
 
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
-        plugin.getLogger().info("EducationServer listening on " + address.toString());
+        extension.getLogger().info("EducationServer listening on " + address.toString());
         ReversionServer server = new EducationReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
         return server;

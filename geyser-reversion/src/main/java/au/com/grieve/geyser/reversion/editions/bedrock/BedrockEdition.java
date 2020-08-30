@@ -24,18 +24,18 @@ import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionServer;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.connector.GeyserConnector;
+import org.geysermc.connector.extension.GeyserExtension;
 import org.geysermc.connector.network.BedrockProtocol;
-import org.geysermc.connector.plugin.GeyserPlugin;
 
 import java.net.InetSocketAddress;
 
 @RequiredArgsConstructor
 public class BedrockEdition implements Edition {
-    private final GeyserPlugin plugin;
+    private final GeyserExtension extension;
 
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
-        plugin.getLogger().info("BedrockServer listening on " + address.toString());
+        extension.getLogger().info("BedrockServer listening on " + address.toString());
         ReversionServer server = new BedrockReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
         return server;

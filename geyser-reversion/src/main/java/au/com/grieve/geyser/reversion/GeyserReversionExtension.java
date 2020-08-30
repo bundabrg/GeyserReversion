@@ -33,10 +33,10 @@ import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
 import org.geysermc.connector.event.events.geyser.GeyserStartEvent;
 import org.geysermc.connector.event.handlers.EventHandler;
-import org.geysermc.connector.plugin.GeyserPlugin;
-import org.geysermc.connector.plugin.PluginClassLoader;
-import org.geysermc.connector.plugin.PluginManager;
-import org.geysermc.connector.plugin.annotations.Plugin;
+import org.geysermc.connector.extension.ExtensionClassLoader;
+import org.geysermc.connector.extension.ExtensionManager;
+import org.geysermc.connector.extension.GeyserExtension;
+import org.geysermc.connector.extension.annotations.Extension;
 import org.geysermc.connector.utils.LanguageUtils;
 
 import java.io.File;
@@ -52,24 +52,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(
+@Extension(
         name = "GeyserReversion",
         version = "1.1.0-dev",
         authors = {"bundabrg"},
         description = "Provides multiversion protocol support for Geyser"
 )
 @Getter
-public class GeyserReversionPlugin extends GeyserPlugin {
+public class GeyserReversionExtension extends GeyserExtension {
     @Getter
-    private static GeyserReversionPlugin instance;
+    private static GeyserReversionExtension instance;
 
     private final Map<String, Edition> registeredEditions = new HashMap<>();
     private final List<RegisteredTranslator> registeredTranslators = new ArrayList<>();
 
     private Configuration config;
 
-    public GeyserReversionPlugin(PluginManager pluginManager, PluginClassLoader pluginClassLoader) {
-        super(pluginManager, pluginClassLoader);
+    public GeyserReversionExtension(ExtensionManager extensionManager, ExtensionClassLoader extensionClassLoader) {
+        super(extensionManager, extensionClassLoader);
         instance = this;
 
         loadConfig();
@@ -140,7 +140,7 @@ public class GeyserReversionPlugin extends GeyserPlugin {
         Edition edition = registeredEditions.get(config.getEdition());
 
         if (edition == null) {
-            getLogger().error(String.format("Invalid Edition '%s'. Plugin disabled.", config.getEdition()));
+            getLogger().error(String.format("Invalid Edition '%s'. Extension disabled.", config.getEdition()));
             return;
         }
 
@@ -160,7 +160,7 @@ public class GeyserReversionPlugin extends GeyserPlugin {
             bedrockServer.set(GeyserConnector.getInstance(), server);
 
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            getLogger().error(String.format("Unable to set Edition '%s'. Plugin disabled.", config.getEdition()), e);
+            getLogger().error(String.format("Unable to set Edition '%s'. Extension disabled.", config.getEdition()), e);
         }
 
         // Give the old BedrockServer time to close down

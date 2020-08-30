@@ -37,13 +37,13 @@ jobs:
           # Set Maven Version
           mvn -B versions:set -DnewVersion=${MAVEN_VERSION}
 
-          # Set Plugin Version
-          sed -i "/version = .*/ s/version = \"[^\"]*\"/version = \"${MAVEN_VERSION}\"/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionPlugin.java
+          # Set Extension Version
+          sed -i "/version = .*/ s/version = \"[^\"]*\"/version = \"${MAVEN_VERSION}\"/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionExtension.java
 
       - name: Update Version for Developmental Build
         if: "!startsWith(github.ref,'refs/tags/v')"
         run: |
-          sed -i "/version = .*/ s/-dev/-b${GITHUB_RUN_NUMBER}/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionPlugin.java
+          sed -i "/version = .*/ s/-dev/-b${GITHUB_RUN_NUMBER}/" geyser-reversion/src/main/java/au/com/grieve/geyser/reversion/GeyserReversionExtension.java
 
       - name: Build with Maven
         run: |
