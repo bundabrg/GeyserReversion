@@ -74,8 +74,9 @@ public class BedrockUpstreamPacketHandler extends UpstreamPacketHandler {
             packet.setJwt(serverSession.getLoginData().getHandshakeJwt().serialize());
             session.sendUpstreamPacketImmediately(packet);
         } catch (LoginException e) {
-            session.disconnect("disconnectionScreen.internalError.cantConnect");
-            session.getConnector().getLogger().error("Failed to encrypt connection", e);
+            session.disconnect("You are not able to connect. Please make sure your account is authorized to connect or contact the server administrator.");
+            session.getConnector().getLogger().error("Failed to encrypt connection: " + e.getMessage());
+            return true;
         }
 
         // Setup Session
