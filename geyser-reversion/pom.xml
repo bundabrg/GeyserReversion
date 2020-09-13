@@ -64,6 +64,12 @@
         </dependency>
         <dependency>
             <groupId>au.com.grieve.reversion</groupId>
+            <artifactId>translator-v414be_to_v412be</artifactId>
+            <version>${reversion.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.grieve.reversion</groupId>
             <artifactId>edition-education</artifactId>
             <version>${reversion.version}</version>
             <scope>compile</scope>
