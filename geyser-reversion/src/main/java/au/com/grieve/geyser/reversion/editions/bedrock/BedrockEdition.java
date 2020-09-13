@@ -18,26 +18,36 @@
 
 package au.com.grieve.geyser.reversion.editions.bedrock;
 
+import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEventHandler;
+import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
+import au.com.grieve.reversion.editions.bedrock.BedrockRegisteredTranslator;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionServer;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.connector.GeyserConnector;
-import org.geysermc.connector.extension.GeyserExtension;
 import org.geysermc.connector.network.BedrockProtocol;
 
 import java.net.InetSocketAddress;
 
 @RequiredArgsConstructor
 public class BedrockEdition implements Edition {
-    private final GeyserExtension extension;
+    private final GeyserReversionExtension extension;
 
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("BedrockServer listening on " + address.toString());
-        ReversionServer server = new BedrockReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
+        BedrockReversionServer server = new BedrockReversionServer("geyser-bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
+
+        for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
+            if (translator instanceof BedrockRegisteredTranslator) {
+                server.registerTranslator((BedrockRegisteredTranslator) translator);
+            }
+            extension.getLogger().debug("Registered Translator: " + translator.getName());
+        }
+
         return server;
     }
 }

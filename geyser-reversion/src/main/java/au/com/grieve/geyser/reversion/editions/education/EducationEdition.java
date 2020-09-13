@@ -18,17 +18,19 @@
 
 package au.com.grieve.geyser.reversion.editions.education;
 
+import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEventHandler;
 import au.com.grieve.geyser.reversion.editions.education.commands.EducationCommand;
+import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
+import au.com.grieve.reversion.editions.bedrock.BedrockRegisteredTranslator;
 import au.com.grieve.reversion.editions.education.EducationReversionServer;
 import au.com.grieve.reversion.editions.education.utils.TokenManager;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
 import org.geysermc.connector.event.events.geyser.GeyserStartEvent;
-import org.geysermc.connector.extension.GeyserExtension;
 import org.geysermc.connector.network.BedrockProtocol;
 
 import java.io.File;
@@ -36,10 +38,10 @@ import java.net.InetSocketAddress;
 
 @Getter
 public class EducationEdition implements Edition {
-    private final GeyserExtension extension;
+    private final GeyserReversionExtension extension;
     private final TokenManager tokenManager;
 
-    public EducationEdition(GeyserExtension extension) {
+    public EducationEdition(GeyserReversionExtension extension) {
         this.extension = extension;
 
         this.tokenManager = new TokenManager(new File(extension.getDataFolder(), "tokens.yml"));
@@ -58,8 +60,16 @@ public class EducationEdition implements Edition {
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("EducationServer listening on " + address.toString());
-        ReversionServer server = new EducationReversionServer("bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
+        EducationReversionServer server = new EducationReversionServer("geyser-bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
+
+        for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
+            if (translator instanceof BedrockRegisteredTranslator) {
+                server.registerTranslator((BedrockRegisteredTranslator) translator);
+            }
+            extension.getLogger().debug("Registered Translator: " + translator.getName());
+        }
+
         return server;
     }
 }
