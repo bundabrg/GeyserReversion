@@ -22,27 +22,29 @@
  * SOFTWARE.
  */
 
-package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
+package au.com.grieve.geyser.reversion.server;
 
-import au.com.grieve.reversion.api.ReversionSession;
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import lombok.Getter;
-import org.geysermc.connector.GeyserConnector;
-import org.geysermc.connector.network.ConnectorServerEventHandler;
-import org.geysermc.connector.network.session.GeyserSession;
+import com.nukkitx.protocol.bedrock.BedrockServer;
+import io.netty.channel.EventLoopGroup;
 
-@Getter
-public class BedrockServerEventHandler extends ConnectorServerEventHandler {
-    private final GeyserConnector connector;
+import java.net.InetSocketAddress;
 
-    public BedrockServerEventHandler(GeyserConnector connector) {
-        super(connector);
-        this.connector = connector;
+/**
+ * Provides a Facade BedrockServer to Geyser
+ */
+public class GeyserBedrockServer extends BedrockServer {
+
+    public GeyserBedrockServer(InetSocketAddress bindAddress) {
+        super(bindAddress);
     }
 
-    @Override
-    public void onSessionCreation(BedrockServerSession bedrockServerSession) {
-        bedrockServerSession.setLogging(true);
-        bedrockServerSession.setPacketHandler(new BedrockUpstreamPacketHandler((ReversionSession) bedrockServerSession, this.connector, new GeyserSession(this.connector, bedrockServerSession)));
+    public GeyserBedrockServer(InetSocketAddress bindAddress, int maxThreads) {
+        super(bindAddress, maxThreads);
     }
+
+    public GeyserBedrockServer(InetSocketAddress bindAddress, int maxThreads, EventLoopGroup eventLoopGroup) {
+        super(bindAddress, maxThreads, eventLoopGroup);
+    }
+
+
 }

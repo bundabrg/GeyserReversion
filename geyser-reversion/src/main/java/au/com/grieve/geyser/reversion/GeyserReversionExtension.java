@@ -1,19 +1,25 @@
 /*
- * EduSupport - Minecraft Protocol Support for MultiVersion in Geyser
- * Copyright (C) 2020 GeyserReversion Developers
+ * MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (c) 2020 GeyserReversion Developers
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package au.com.grieve.geyser.reversion;
@@ -22,13 +28,9 @@ import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.config.Configuration;
 import au.com.grieve.geyser.reversion.editions.bedrock.BedrockEdition;
 import au.com.grieve.geyser.reversion.editions.education.EducationEdition;
+import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
-import au.com.grieve.reversion.translators.v390ee_to_v408be.Register_v390ee_to_v408be;
-import au.com.grieve.reversion.translators.v409be_to_v408be.Register_v409be_to_v408be;
-import au.com.grieve.reversion.translators.v411be_to_v409be.Register_v411be_to_v409be;
-import au.com.grieve.reversion.translators.v412be_to_v411be.Register_v412be_to_v411be;
-import au.com.grieve.reversion.translators.v414be_to_v412be.Register_v414be_to_v412be;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
@@ -92,11 +94,9 @@ public class GeyserReversionExtension extends GeyserExtension {
      * Register built-in translators
      */
     private void registerTranslators() {
-        registerTranslator(Register_v409be_to_v408be.TRANSLATOR);
-        registerTranslator(Register_v411be_to_v409be.TRANSLATOR);
-        registerTranslator(Register_v390ee_to_v408be.TRANSLATOR);
-        registerTranslator(Register_v412be_to_v411be.TRANSLATOR);
-        registerTranslator(Register_v414be_to_v412be.TRANSLATOR);
+        for (RegisteredTranslator translator : Build.TRANSLATORS) {
+            registerTranslator(translator);
+        }
     }
 
 
