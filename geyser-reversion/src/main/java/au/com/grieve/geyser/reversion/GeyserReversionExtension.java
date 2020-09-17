@@ -22,7 +22,6 @@ import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.config.Configuration;
 import au.com.grieve.geyser.reversion.editions.bedrock.BedrockEdition;
 import au.com.grieve.geyser.reversion.editions.education.EducationEdition;
-import au.com.grieve.geyser.reversion.translators.geyser.v408.Register_Geyser_v408;
 import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.translators.v390ee_to_v408be.Register_v390ee_to_v408be;
@@ -96,9 +95,6 @@ public class GeyserReversionExtension extends GeyserExtension {
         registerTranslator(Register_v390ee_to_v408be.TRANSLATOR);
         registerTranslator(Register_v412be_to_v411be.TRANSLATOR);
         registerTranslator(Register_v414be_to_v412be.TRANSLATOR);
-
-        // Add Geyser Translators
-        registerTranslator(Register_Geyser_v408.TRANSLATOR);
     }
 
 
