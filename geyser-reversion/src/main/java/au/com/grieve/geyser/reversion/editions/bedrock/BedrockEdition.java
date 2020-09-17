@@ -24,12 +24,11 @@ import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEve
 import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.editions.bedrock.BedrockRegisteredTranslator;
+import au.com.grieve.reversion.editions.bedrock.BedrockReversionServer;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.network.BedrockProtocol;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 
 @RequiredArgsConstructor
@@ -40,16 +39,7 @@ public class BedrockEdition implements Edition {
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("BedrockServer listening on " + address.toString());
 
-        int version = 0;
-        try {
-            Object toCodec = BedrockProtocol.SUPPORTED_BEDROCK_CODECS.get(BedrockProtocol.SUPPORTED_BEDROCK_CODECS.size() - 1);
-            Method getProtocolVersion = toCodec.getClass().getMethod("getProtocolVersion");
-            version = (int) getProtocolVersion.invoke(toCodec);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        GeyserReversionServer server = new GeyserReversionServer("bedrock", version, address);
+        BedrockReversionServer server = new BedrockReversionServer(BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {

@@ -67,6 +67,8 @@ public class GeyserReversionExtension extends GeyserExtension {
     private final Map<String, Edition> registeredEditions = new HashMap<>();
     private final List<RegisteredTranslator> registeredTranslators = new ArrayList<>();
 
+    private ReversionServer server;
+
     private Configuration config;
 
     public GeyserReversionExtension(ExtensionManager extensionManager, ExtensionClassLoader extensionClassLoader) {
@@ -137,7 +139,7 @@ public class GeyserReversionExtension extends GeyserExtension {
     /**
      * Replace Geyser BedrockServer with one provided by an edition
      */
-    @GeyserEventHandler(priority = EventHandler.PRIORITY.HIGH)
+    @GeyserEventHandler(priority = EventHandler.PRIORITY.LOW)
     public void onGeyserStart(GeyserStartEvent event) {
         Edition edition = registeredEditions.get(config.getEdition());
 
@@ -148,22 +150,23 @@ public class GeyserReversionExtension extends GeyserExtension {
 
         InetSocketAddress address = GeyserConnector.getInstance().getBedrockServer().getBindAddress();
 
+        // Create a new server on the same address/port as the default server
+        server = edition.createReversionServer(GeyserConnector.getInstance().getBedrockServer().getBindAddress());
+
         try {
             Field bedrockServer = GeyserConnector.class.getDeclaredField("bedrockServer");
             bedrockServer.setAccessible(true);
 
-            ReversionServer server = edition.createReversionServer(GeyserConnector.getInstance().getBedrockServer().getBindAddress());
-
             GeyserConnector.getInstance().getBedrockServer().close();
-            bedrockServer.set(GeyserConnector.getInstance(), server);
+//            bedrockServer.set(GeyserConnector.getInstance(), server);
 
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException e) {
             getLogger().error(String.format("Unable to set Edition '%s'. Extension disabled.", config.getEdition()), e);
         }
 
-        // Give the old BedrockServer time to close down
+        // Give the old BedrockServer time to close down then bind our default server
         GeyserConnector.getInstance().getGeneralThreadPool().schedule(() -> {
-            GeyserConnector.getInstance().getBedrockServer().bind().whenComplete((avoid, throwable) -> {
+            server.bind().whenComplete((avoid, throwable) -> {
                 if (throwable != null) {
                     getLogger().severe(LanguageUtils.getLocaleStringLog("geyser.core.fail", address.getAddress().toString(), address.getPort()));
                     throwable.printStackTrace();

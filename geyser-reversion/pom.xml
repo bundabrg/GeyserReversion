@@ -105,19 +105,9 @@
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.nukkitx.protocol.bedrock</pattern>
-                                    <shadedPattern>au.com.grieve.geyser.reversion.shaded.nukkitx.protocol.bedrock
+                                    <pattern>com.nukkitx.protocol</pattern>
+                                    <shadedPattern>au.com.grieve.geyser.reversion.shaded.nukkitx.protocol
                                     </shadedPattern>
-                                    <excludes>
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockServer</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockServerSession</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockServerEventHandler</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockPong</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockWrapperSerializer</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockPacketCodec$1</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockPacketCodec$Builder</exclude>-->
-                                        <!--                                        <exclude>com.nukkitx.protocol.bedrock.BedrockPacketHelper</exclude>-->
-                                    </excludes>
                                 </relocation>
                             </relocations>
                         </configuration>

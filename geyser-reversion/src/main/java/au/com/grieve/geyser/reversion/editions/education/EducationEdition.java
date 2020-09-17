@@ -60,7 +60,7 @@ public class EducationEdition implements Edition {
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("EducationServer listening on " + address.toString());
-        EducationReversionServer server = new EducationReversionServer("geyser-bedrock", BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
+        EducationReversionServer server = new EducationReversionServer(BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
         server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
