@@ -24,27 +24,37 @@
 
 package au.com.grieve.geyser.reversion.server;
 
+import au.com.grieve.reversion.api.ReversionServer;
 import com.nukkitx.protocol.bedrock.BedrockServer;
-import io.netty.channel.EventLoopGroup;
+import lombok.Getter;
 
-import java.net.InetSocketAddress;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Provides a Facade BedrockServer to Geyser
  */
+@Getter
 public class GeyserBedrockServer extends BedrockServer {
+    protected final BedrockServer original;
 
-    public GeyserBedrockServer(InetSocketAddress bindAddress) {
-        super(bindAddress);
+    // List of Reversion Servers
+    protected final Set<ReversionServer> servers = new HashSet<>();
+
+    // Default Server (follows Geyser settings)
+    protected ReversionServer defaultServer;
+
+    public GeyserBedrockServer(BedrockServer original) {
+        super(original.getBindAddress());
+
+        this.original = original;
     }
 
-    public GeyserBedrockServer(InetSocketAddress bindAddress, int maxThreads) {
-        super(bindAddress, maxThreads);
+    public void registerServer(ReversionServer server, boolean isDefault) {
+        servers.add(server);
+        if (isDefault) {
+            defaultServer = server;
+        }
     }
-
-    public GeyserBedrockServer(InetSocketAddress bindAddress, int maxThreads, EventLoopGroup eventLoopGroup) {
-        super(bindAddress, maxThreads, eventLoopGroup);
-    }
-
 
 }

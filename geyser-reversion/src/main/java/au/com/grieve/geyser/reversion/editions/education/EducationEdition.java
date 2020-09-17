@@ -26,13 +26,15 @@ package au.com.grieve.geyser.reversion.editions.education;
 
 import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.api.Edition;
-import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEventHandler;
+import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockEditionServerEventHandler;
 import au.com.grieve.geyser.reversion.editions.education.commands.EducationCommand;
+import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.editions.bedrock.BedrockRegisteredTranslator;
 import au.com.grieve.reversion.editions.education.EducationReversionServer;
 import au.com.grieve.reversion.editions.education.utils.TokenManager;
+import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
@@ -41,6 +43,7 @@ import org.geysermc.connector.network.BedrockProtocol;
 
 import java.io.File;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 @Getter
 public class EducationEdition implements Edition {
@@ -66,8 +69,14 @@ public class EducationEdition implements Edition {
     @Override
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("EducationServer listening on " + address.toString());
-        EducationReversionServer server = new EducationReversionServer(BedrockProtocol.DEFAULT_BEDROCK_CODEC, tokenManager, address);
-        server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
+
+        BedrockPacketCodec defaultCodec = Arrays.stream(Build.PROTOCOLS)
+                .filter(p -> p.getProtocolVersion() == BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
+
+        EducationReversionServer server = new EducationReversionServer(defaultCodec, tokenManager, address);
+        server.setHandler(new BedrockEditionServerEventHandler(extension));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
             if (translator instanceof BedrockRegisteredTranslator) {

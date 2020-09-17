@@ -28,9 +28,9 @@ import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.config.Configuration;
 import au.com.grieve.geyser.reversion.editions.bedrock.BedrockEdition;
 import au.com.grieve.geyser.reversion.editions.education.EducationEdition;
+import au.com.grieve.geyser.reversion.server.GeyserBedrockServer;
 import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.api.RegisteredTranslator;
-import au.com.grieve.reversion.api.ReversionServer;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
@@ -69,7 +69,7 @@ public class GeyserReversionExtension extends GeyserExtension {
     private final Map<String, Edition> registeredEditions = new HashMap<>();
     private final List<RegisteredTranslator> registeredTranslators = new ArrayList<>();
 
-    private ReversionServer server;
+    private GeyserBedrockServer server;
 
     private Configuration config;
 
@@ -148,10 +148,12 @@ public class GeyserReversionExtension extends GeyserExtension {
             return;
         }
 
+        server = new GeyserBedrockServer(GeyserConnector.getInstance().getBedrockServer());
+
         InetSocketAddress address = GeyserConnector.getInstance().getBedrockServer().getBindAddress();
 
         // Create a new server on the same address/port as the default server
-        server = edition.createReversionServer(GeyserConnector.getInstance().getBedrockServer().getBindAddress());
+        server.registerServer(edition.createReversionServer(address), true);
 
         try {
             Field bedrockServer = GeyserConnector.class.getDeclaredField("bedrockServer");
@@ -161,7 +163,7 @@ public class GeyserReversionExtension extends GeyserExtension {
 //            bedrockServer.set(GeyserConnector.getInstance(), server);
 
         } catch (NoSuchFieldException e) {
-            getLogger().error(String.format("Unable to set Edition '%s'. Extension disabled.", config.getEdition()), e);
+            getLogger().error(String.format("Unable to enable Edition '%s'. Extension disabled.", config.getEdition()), e);
         }
 
         // Give the old BedrockServer time to close down then bind our default server

@@ -26,16 +26,18 @@ package au.com.grieve.geyser.reversion.editions.bedrock;
 
 import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.api.Edition;
-import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockServerEventHandler;
+import au.com.grieve.geyser.reversion.editions.bedrock.handlers.BedrockEditionServerEventHandler;
+import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.api.RegisteredTranslator;
 import au.com.grieve.reversion.api.ReversionServer;
 import au.com.grieve.reversion.editions.bedrock.BedrockRegisteredTranslator;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionServer;
+import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import lombok.RequiredArgsConstructor;
-import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.network.BedrockProtocol;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 public class BedrockEdition implements Edition {
@@ -45,8 +47,13 @@ public class BedrockEdition implements Edition {
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("BedrockServer listening on " + address.toString());
 
-        BedrockReversionServer server = new BedrockReversionServer(BedrockProtocol.DEFAULT_BEDROCK_CODEC, address);
-        server.setHandler(new BedrockServerEventHandler(GeyserConnector.getInstance()));
+        BedrockPacketCodec defaultCodec = Arrays.stream(Build.PROTOCOLS)
+                .filter(p -> p.getProtocolVersion() == BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
+
+        BedrockReversionServer server = new BedrockReversionServer(defaultCodec, address);
+        server.setHandler(new BedrockEditionServerEventHandler(extension));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
             if (translator instanceof BedrockRegisteredTranslator) {
