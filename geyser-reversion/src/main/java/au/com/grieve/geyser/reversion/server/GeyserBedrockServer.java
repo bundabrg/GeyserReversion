@@ -22,29 +22,46 @@
  * SOFTWARE.
  */
 
-package au.com.grieve.geyser.reversion.config;
+package au.com.grieve.geyser.reversion.server;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import au.com.grieve.reversion.api.ReversionServer;
+import com.nukkitx.protocol.bedrock.BedrockServer;
 import lombok.Getter;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
+/**
+ * Provides a Facade BedrockServer to Geyser
+ */
 @Getter
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Configuration {
-    private int version;
+public class GeyserBedrockServer extends BedrockServer {
+    protected final BedrockServer original;
 
-    private String edition;
+    // List of Reversion Servers
+    protected final Set<ReversionServer> servers = new HashSet<>();
 
-    public static Configuration loadFromFile(File configFile) {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            return mapper.readValue(configFile, Configuration.class);
-        } catch (IOException e) {
-            return new Configuration();
+    // Default Server (follows Geyser settings)
+    protected ReversionServer defaultServer;
+
+    public GeyserBedrockServer(BedrockServer original) {
+        super(original.getBindAddress());
+
+        this.original = original;
+
+        setHandler(original.getHandler());
+    }
+
+    public void registerServer(ReversionServer server, boolean isDefault) {
+        servers.add(server);
+        if (isDefault) {
+            defaultServer = server;
         }
+    }
+
+    @Override
+    public CompletableFuture<Void> bind() {
+        return defaultServer.bind();
     }
 }

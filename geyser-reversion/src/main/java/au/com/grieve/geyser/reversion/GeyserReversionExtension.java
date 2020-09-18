@@ -1,19 +1,25 @@
 /*
- * EduSupport - Minecraft Protocol Support for MultiVersion in Geyser
- * Copyright (C) 2020 GeyserReversion Developers
+ * MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (c) 2020 GeyserReversion Developers
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package au.com.grieve.geyser.reversion;
@@ -22,13 +28,9 @@ import au.com.grieve.geyser.reversion.api.Edition;
 import au.com.grieve.geyser.reversion.config.Configuration;
 import au.com.grieve.geyser.reversion.editions.bedrock.BedrockEdition;
 import au.com.grieve.geyser.reversion.editions.education.EducationEdition;
-import au.com.grieve.geyser.reversion.translators.geyser.v408.Register_Geyser_v408;
+import au.com.grieve.geyser.reversion.server.GeyserBedrockServer;
+import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.api.RegisteredTranslator;
-import au.com.grieve.reversion.api.ReversionServer;
-import au.com.grieve.reversion.translators.v390ee_to_v408be.Register_v390ee_to_v408be;
-import au.com.grieve.reversion.translators.v409be_to_v408be.Register_v409be_to_v408be;
-import au.com.grieve.reversion.translators.v411be_to_v409be.Register_v411be_to_v409be;
-import au.com.grieve.reversion.translators.v412be_to_v411be.Register_v412be_to_v411be;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
 import org.geysermc.connector.event.annotations.GeyserEventHandler;
@@ -67,6 +69,8 @@ public class GeyserReversionExtension extends GeyserExtension {
     private final Map<String, Edition> registeredEditions = new HashMap<>();
     private final List<RegisteredTranslator> registeredTranslators = new ArrayList<>();
 
+    private GeyserBedrockServer server;
+
     private Configuration config;
 
     public GeyserReversionExtension(ExtensionManager extensionManager, ExtensionClassLoader extensionClassLoader) {
@@ -90,13 +94,9 @@ public class GeyserReversionExtension extends GeyserExtension {
      * Register built-in translators
      */
     private void registerTranslators() {
-        registerTranslator(Register_v409be_to_v408be.TRANSLATOR);
-        registerTranslator(Register_v411be_to_v409be.TRANSLATOR);
-        registerTranslator(Register_v390ee_to_v408be.TRANSLATOR);
-        registerTranslator(Register_v412be_to_v411be.TRANSLATOR);
-
-        // Add Geyser Translators
-        registerTranslator(Register_Geyser_v408.TRANSLATOR);
+        for (RegisteredTranslator translator : Build.TRANSLATORS) {
+            registerTranslator(translator);
+        }
     }
 
 
@@ -139,7 +139,7 @@ public class GeyserReversionExtension extends GeyserExtension {
     /**
      * Replace Geyser BedrockServer with one provided by an edition
      */
-    @GeyserEventHandler(priority = EventHandler.PRIORITY.HIGH)
+    @GeyserEventHandler(priority = EventHandler.PRIORITY.LOW)
     public void onGeyserStart(GeyserStartEvent event) {
         Edition edition = registeredEditions.get(config.getEdition());
 
@@ -148,24 +148,27 @@ public class GeyserReversionExtension extends GeyserExtension {
             return;
         }
 
+        server = new GeyserBedrockServer(GeyserConnector.getInstance().getBedrockServer());
+
         InetSocketAddress address = GeyserConnector.getInstance().getBedrockServer().getBindAddress();
+
+        // Create a new server on the same address/port as the default server
+        server.registerServer(edition.createReversionServer(address), true);
 
         try {
             Field bedrockServer = GeyserConnector.class.getDeclaredField("bedrockServer");
             bedrockServer.setAccessible(true);
 
-            ReversionServer server = edition.createReversionServer(GeyserConnector.getInstance().getBedrockServer().getBindAddress());
-
             GeyserConnector.getInstance().getBedrockServer().close();
-            bedrockServer.set(GeyserConnector.getInstance(), server);
+//            bedrockServer.set(GeyserConnector.getInstance(), server);
 
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            getLogger().error(String.format("Unable to set Edition '%s'. Extension disabled.", config.getEdition()), e);
+        } catch (NoSuchFieldException e) {
+            getLogger().error(String.format("Unable to enable Edition '%s'. Extension disabled.", config.getEdition()), e);
         }
 
-        // Give the old BedrockServer time to close down
+        // Give the old BedrockServer time to close down then bind our default server
         GeyserConnector.getInstance().getGeneralThreadPool().schedule(() -> {
-            GeyserConnector.getInstance().getBedrockServer().bind().whenComplete((avoid, throwable) -> {
+            server.bind().whenComplete((avoid, throwable) -> {
                 if (throwable != null) {
                     getLogger().severe(LanguageUtils.getLocaleStringLog("geyser.core.fail", address.getAddress().toString(), address.getPort()));
                     throwable.printStackTrace();
