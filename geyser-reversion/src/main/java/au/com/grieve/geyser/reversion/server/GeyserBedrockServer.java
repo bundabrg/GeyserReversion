@@ -30,6 +30,7 @@ import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Provides a Facade BedrockServer to Geyser
@@ -48,6 +49,8 @@ public class GeyserBedrockServer extends BedrockServer {
         super(original.getBindAddress());
 
         this.original = original;
+
+        setHandler(original.getHandler());
     }
 
     public void registerServer(ReversionServer server, boolean isDefault) {
@@ -57,4 +60,8 @@ public class GeyserBedrockServer extends BedrockServer {
         }
     }
 
+    @Override
+    public CompletableFuture<Void> bind() {
+        return defaultServer.bind();
+    }
 }

@@ -217,6 +217,8 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
 
     @Override
     public boolean handle(LoginPacket loginPacket) {
+        System.err.println("HERE");
+
         // Check that we support the codec
         BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(loginPacket.getProtocolVersion());
         if (packetCodec == null) {
@@ -244,6 +246,8 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
             return true;
         }
 
+        System.err.println("2");
+
         // Setup Session
         JsonNode extraData = serverSession.getLoginData().getPayload().get("extraData");
         geyserSession.setAuthenticationData(new AuthData(
@@ -251,9 +255,12 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
                 UUID.fromString(extraData.get("identity").asText()),
                 extraData.get("XUID").asText()
         ));
+        System.err.println("3");
 
         serverSession.getLoginData();
         geyserSession.setClientData(LoginData.JSON_MAPPER.convertValue(serverSession.getLoginData().getClientData(), BedrockClientData.class));
+        System.err.println(geyserSession.getClientData());
+        System.err.println("4: " + serverSession);
 
         PlayStatusPacket playStatus = new PlayStatusPacket();
         playStatus.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
@@ -269,8 +276,9 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
         serverSession.getServer().getToCodec().tryEncode(buffer, original);
-        com.nukkitx.protocol.bedrock.BedrockPacket translated = BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryDecode(buffer, original.getPacketId());
+        com.nukkitx.protocol.bedrock.BedrockPacket translated = BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryDecode(buffer, serverSession.getServer().getToCodec().getId(original.getClass()));
 
+        System.err.println("got packet: " + original);
         return translated.handle(facadeSession.getPacketHandler());
     }
 

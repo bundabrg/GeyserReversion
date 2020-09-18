@@ -31,8 +31,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.geysermc.connector.network.BedrockProtocol;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
 
 @ParametersAreNonnullByDefault
 public class GeyserServerSession extends BedrockServerSession {
@@ -42,6 +42,7 @@ public class GeyserServerSession extends BedrockServerSession {
         super(null, null, null);
 
         this.reversionSession = reversionSession;
+
     }
 
     @Override
@@ -49,8 +50,10 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
+
+        System.err.println("original: " + original + " - " + BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
         BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, original.getPacketId());
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
 
         reversionSession.sendPacket(translated);
     }
@@ -60,15 +63,22 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
+
+        System.err.println("original: " + original + " - " + BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
         BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, original.getPacketId());
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
 
         reversionSession.sendPacketImmediately(translated);
     }
 
     @Override
-    public void sendWrapped(Collection<BedrockPacket> packets, boolean encrypt) {
+    public boolean isClosed() {
+        return reversionSession.isClosed();
+    }
 
-        super.sendWrapped(packets, encrypt);
+    @Override
+    public void disconnect(@Nullable String reason, boolean hideReason) {
+        System.err.println("Diconnect: " + reason);
+        super.disconnect(reason, hideReason);
     }
 }

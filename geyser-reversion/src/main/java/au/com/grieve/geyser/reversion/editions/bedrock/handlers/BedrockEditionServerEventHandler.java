@@ -85,7 +85,7 @@ public class BedrockEditionServerEventHandler implements BedrockServerEventHandl
 
         facadeSession.setPacketHandler(new UpstreamPacketHandler(GeyserConnector.getInstance(), geyserSession));
         bedrockServerSession.setPacketHandler(new BedrockEditionUpstreamPacketHandler((BedrockReversionSession) bedrockServerSession,
-                new GeyserSession(GeyserConnector.getInstance(), facadeSession), facadeSession));
+                geyserSession, facadeSession));
     }
 
     @Override

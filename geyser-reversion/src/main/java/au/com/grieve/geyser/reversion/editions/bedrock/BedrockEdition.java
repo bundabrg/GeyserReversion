@@ -52,6 +52,7 @@ public class BedrockEdition implements Edition {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
 
+        System.err.println("Codec: " + defaultCodec);
         BedrockReversionServer server = new BedrockReversionServer(defaultCodec, address);
         server.setHandler(new BedrockEditionServerEventHandler(extension));
 
