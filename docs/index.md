@@ -16,6 +16,7 @@ allow any supported version to connect to any supported Geyser.
 * Minecraft Bedrock v1.16.100.52 (beta)
 * Minecraft Bedrock v1.16.100.53 (beta)
 * Minecraft Bedrock v1.16.100.55 (beta)
+* Minecraft Bedrock v1.16.100.56 (beta)
 
 ### Minecraft Education
 * Minecraft Education v1.14.31
