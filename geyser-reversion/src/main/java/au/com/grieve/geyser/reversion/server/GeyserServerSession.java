@@ -25,14 +25,20 @@
 package au.com.grieve.geyser.reversion.server;
 
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionSession;
+import com.nukkitx.network.util.DisconnectReason;
 import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.geysermc.connector.network.BedrockProtocol;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.crypto.SecretKey;
+import java.net.InetSocketAddress;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 public class GeyserServerSession extends BedrockServerSession {
@@ -74,8 +80,93 @@ public class GeyserServerSession extends BedrockServerSession {
         return reversionSession.isClosed();
     }
 
+//    @Override
+//    public void setPacketHandler(@Nonnull BedrockPacketHandler packetHandler) {
+//        throw new UnsupportedOperationException();
+//    }
+
+//    @Override
+//    public void setPacketCodec(BedrockPacketCodec packetCodec) {
+//        throw new UnsupportedOperationException();
+//    }
+
+    @Override
+    public void sendWrapped(Collection<BedrockPacket> packets, boolean encrypt) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public synchronized void sendWrapped(ByteBuf compressed, boolean encrypt) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public synchronized void enableEncryption(@Nonnull SecretKey secretKey) {
+        reversionSession.enableEncryption(secretKey);
+    }
+
+    @Override
+    public boolean isEncrypted() {
+        return reversionSession.isEncrypted();
+    }
+
+    @Override
+    public InetSocketAddress getAddress() {
+        return reversionSession.getAddress();
+    }
+
+//    @Override
+//    public BedrockPacketCodec getPacketCodec() {
+//        throw new UnsupportedOperationException();
+//    }
+
+//    @Override
+//    public BedrockPacketHandler getPacketHandler() {
+//        throw new UnsupportedOperationException();
+//    }
+
+//    @Override
+//    public BatchHandler getBatchHandler() {
+//        throw new UnsupportedOperationException();
+//    }
+
+//    @Override
+//    public void setBatchHandler(BatchHandler batchHandler) {
+//        throw new UnsupportedOperationException();
+//    }
+
+    @Override
+    public int getCompressionLevel() {
+        return reversionSession.getCompressionLevel();
+    }
+
+    @Override
+    public void setCompressionLevel(int compressionLevel) {
+        reversionSession.setCompressionLevel(compressionLevel);
+    }
+
+    @Override
+    public boolean isLogging() {
+        return reversionSession.isLogging();
+    }
+
+    @Override
+    public void setLogging(boolean logging) {
+        reversionSession.setLogging(logging);
+    }
+
+    @Override
+    public void addDisconnectHandler(Consumer<DisconnectReason> disconnectHandler) {
+        reversionSession.addDisconnectHandler(disconnectHandler);
+    }
+
+    @Override
+    public long getLatency() {
+        return reversionSession.getLatency();
+    }
+
     @Override
     public void disconnect(@Nullable String reason, boolean hideReason) {
-        super.disconnect(reason, hideReason);
+        reversionSession.disconnect(reason, hideReason);
     }
 }

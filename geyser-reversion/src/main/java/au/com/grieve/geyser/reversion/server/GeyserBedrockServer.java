@@ -25,9 +25,13 @@
 package au.com.grieve.geyser.reversion.server;
 
 import au.com.grieve.reversion.api.ReversionServer;
+import com.nukkitx.network.raknet.RakNetServer;
 import com.nukkitx.protocol.bedrock.BedrockServer;
+import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
+import io.netty.bootstrap.Bootstrap;
 import lombok.Getter;
 
+import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -63,5 +67,40 @@ public class GeyserBedrockServer extends BedrockServer {
     @Override
     public CompletableFuture<Void> bind() {
         return defaultServer.bind();
+    }
+
+    @Override
+    public BedrockServerEventHandler getHandler() {
+        return original.getHandler();
+    }
+
+    @Override
+    public void setHandler(BedrockServerEventHandler handler) {
+        original.setHandler(handler);
+    }
+
+    @Override
+    public RakNetServer getRakNet() {
+        return original.getRakNet();
+    }
+
+    @Override
+    public void close(String reason) {
+        original.close(reason);
+    }
+
+    @Override
+    public boolean isClosed() {
+        return super.isClosed();
+    }
+
+    @Override
+    public InetSocketAddress getBindAddress() {
+        return original.getBindAddress();
+    }
+
+    @Override
+    public Bootstrap getBootstrap() {
+        return original.getBootstrap();
     }
 }
