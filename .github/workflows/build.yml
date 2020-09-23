@@ -142,6 +142,7 @@ jobs:
             -F - \
             "$tag_name" << EOF
           Release $tag_name
+          $(git log HEAD^..HEAD --pretty=format:'# %s%n%n%b')
 
           [Online Documentation](https://bundabrg.github.io/GeyserReversion)
 
