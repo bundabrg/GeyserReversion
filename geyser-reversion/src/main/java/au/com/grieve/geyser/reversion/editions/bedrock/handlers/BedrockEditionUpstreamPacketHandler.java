@@ -24,8 +24,10 @@
 
 package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
+import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.server.GeyserServerSession;
 import au.com.grieve.reversion.api.LoginData;
+import au.com.grieve.reversion.api.Translator;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionSession;
 import au.com.grieve.reversion.exceptions.LoginException;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket;
@@ -229,6 +231,16 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
             if (loginPacket.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
                 geyserSession.disconnect(LanguageUtils.getLocaleStringLog("geyser.network.outdated.client", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
                 return true;
+            }
+        }
+
+        // Provide some debug about our translation chain
+        Translator translator = serverSession.getTranslator();
+        if (translator != null) {
+            GeyserReversionExtension.getInstance().getLogger().debug("Translator Chain:");
+            while (translator != null) {
+                GeyserReversionExtension.getInstance().getLogger().debug("  " + translator);
+                translator = translator.getDownstreamTranslator();
             }
         }
 

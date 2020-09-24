@@ -23,6 +23,7 @@ allow any supported version to connect to any supported Geyser.
 
 ## Server Versions Support
 * Geyser Bedrock v1.16.2
+* Geyser Bedrock v1.16.110.56 (beta)
 
 ## Quick Start
 
