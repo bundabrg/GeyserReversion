@@ -3,6 +3,10 @@
 GeyserReversion is a Geyser Extension that provides protocol level support for MultiVersion in Geyser and will eventually
 allow any supported version to connect to any supported Geyser.
 
+If you've heard of [ViaVersion](https://github.com/ViaVersion/ViaVersion) then this is the equivalent but for the Bedrock
+side of Geyser. It allows any of the supported client versions listed below to connect to any of the supported server
+versions.
+
 ## Features
 
 * Minecraft Educational Edition Support
