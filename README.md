@@ -49,7 +49,7 @@ versions.
 
 ## Server Versions Support
 * Geyser Bedrock v1.16.2
-* Geyser Bedrock v1.16.110.56 (beta)
+* Geyser Bedrock v1.16.100.56 (beta)
 
 ## Quick Start
 
