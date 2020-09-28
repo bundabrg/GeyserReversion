@@ -152,3 +152,43 @@ jobs:
           EOF
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to SpigotMC
+        run: |
+          set -x
+          assets=()
+          for asset in ./build/binary/*.jar; do
+            assets+=("$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+
+          docker login -u gitlab+deploy-token-5 -p ${DEPLOY_TOKEN} https://registry.worldguard.com.au
+          cat > config.yml << EOF
+          common:
+            spigot:
+              username: ${SPIGOT_USERNAME}
+              password: ${SPIGOT_PASSWORD}
+          EOF
+
+          docker run -i \
+            --shm-size=2g \
+            -v $(pwd)/config.yml:/app/config/config.yml \
+            -v $(pwd)/build:/app/build \
+            registry.worldguard.com.au/bgrieve/spigot_tools:latest app resource add-version \
+              geyserreversion.84301 \
+              ${assets[0]} \
+              ${tag_name} \
+              "Release ${tag_name}" << EOF
+          [plain]
+          Release $tag_name
+
+          $(git log HEAD^..HEAD --pretty=format:'%s%n%n%b')
+
+          Since Last Release:
+          $(git log $(git describe --tags --abbrev=0 HEAD^ 2> /dev/null || git rev-list --max-parents=0 HEAD)..HEAD --graph --pretty=format:'%h %d %s [%an]' --abbrev-commit)
+          [/plain]
+          EOF
+        env:
+          DEPLOY_TOKEN: ${{ secrets.GITLAB_DEPLOY_TOKEN }}
+          SPIGOT_USERNAME: ${{ secrets.SPIGOT_USERNAME }}
+          SPIGOT_PASSWORD: ${{ secrets.SPIGOT_PASSWORD }}
