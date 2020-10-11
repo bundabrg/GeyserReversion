@@ -4,7 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/Bundabrg/GeyserReversion)](https://GitHub.com/Bundabrg/GeyserReversion/releases/)
 [![GitHub commits](https://img.shields.io/github/commits-since/Bundabrg/GeyserReversion/latest)](https://GitHub.com/Bundabrg/GeyserReversion/commit/)
 [![Github all releases](https://img.shields.io/github/downloads/Bundabrg/GeyserReversion/total.svg)](https://GitHub.com/Bundabrg/GeyserReversion/releases/)
-![HitCount](http://hits.dwyl.com/bundabrg/GeyserReversion.svg)
+<!-- ![HitCount](http://hits.dwyl.com/bundabrg/GeyserReversion.svg) -->
 
 ![Workflow](https://github.com/bundabrg/GeyserReversion/workflows/build/badge.svg)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Bundabrg/GeyserReversion/graphs/commit-activity)
