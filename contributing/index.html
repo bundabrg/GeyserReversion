@@ -413,7 +413,6 @@
 <span class="nb">cd</span> GeyserReversion
 mvn clean package
 </code></pre></div>
-
 <h2 id="contributing-documentation">Contributing Documentation<a class="headerlink" href="#contributing-documentation" title="Permanent link">&para;</a></h2>
 <p>If you can help improve the documentation it would be highly appreciated. Have a look under the <code>docs</code> folder for the existing documentation.</p>
 <p>The documentation is built using <code>mkdocs</code>. You can set up a hot-build dev environment that will auto-refresh changes as they are made.</p>
@@ -426,19 +425,16 @@ mvn clean package
 <p>Install dependencies by running:</p>
 <div class="highlight"><pre><span></span><code>pip3 install -r requirements.txt
 </code></pre></div>
-
 <h3 id="dev-environment">Dev Environment<a class="headerlink" href="#dev-environment" title="Permanent link">&para;</a></h3>
 <p>To start a http document server on <code>http://127.0.0.1:8000</code> execute:</p>
 <div class="highlight"><pre><span></span><code>mkdocs serve
 </code></pre></div>
-
 <h3 id="change-pdf-theme">Change PDF Theme<a class="headerlink" href="#change-pdf-theme" title="Permanent link">&para;</a></h3>
 <p>Edit the PDF theme under <code>docs/theme/pdf</code>. Rebuild by doing the following:</p>
 <div class="highlight"><pre><span></span><code>cd docs/theme/pdf
 npm install
 npm run build-compressed
 </code></pre></div>
-
 <p>This will update <code>pdf.css</code> under <code>docs/css/pdf.css</code>. Rebuilding the docs will now use the new theme.</p>
                 
               
