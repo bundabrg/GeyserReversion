@@ -17,7 +17,7 @@ versions.
 ### Minecraft Bedrock
 * Minecraft Bedrock v1.16.2
 * Minecraft Bedrock v1.16.3
-* Minecraft Bedrock v1.16.4
+* Minecraft Bedrock v1.16.100
 
 ### Minecraft Education
 * Minecraft Education v1.14.31
@@ -26,7 +26,7 @@ versions.
 ## Server Versions Supported
 * Minecraft Bedrock v1.16.2
 * Minecraft Bedrock v1.16.3
-* Minecraft Bedrock v1.16.4
+* Minecraft Bedrock v1.16.100
 
 ## Quick Start
 
