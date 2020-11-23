@@ -24,30 +24,16 @@
 
 package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
-import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.server.GeyserServerSession;
-import au.com.grieve.reversion.api.LoginData;
-import au.com.grieve.reversion.api.Translator;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionSession;
-import au.com.grieve.reversion.exceptions.LoginException;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.packet.*;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
-import com.nukkitx.protocol.bedrock.packet.PlayStatusPacket;
-import com.nukkitx.protocol.bedrock.packet.ResourcePacksInfoPacket;
-import com.nukkitx.protocol.bedrock.packet.ServerToClientHandshakePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import lombok.Getter;
 import org.geysermc.connector.network.BedrockProtocol;
 import org.geysermc.connector.network.session.GeyserSession;
-import org.geysermc.connector.network.session.auth.AuthData;
-import org.geysermc.connector.network.session.auth.BedrockClientData;
-import org.geysermc.connector.utils.LanguageUtils;
-
-import java.util.UUID;
 
 
 @Getter
@@ -62,66 +48,6 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
         this.facadeSession = facadeSession;
     }
 
-    @Override
-    public boolean handle(LoginPacket loginPacket) {
-
-        // Check that we support the codec
-        BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(loginPacket.getProtocolVersion());
-        if (packetCodec == null) {
-            if (loginPacket.getProtocolVersion() > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
-                geyserSession.disconnect(LanguageUtils.getLocaleStringLog("geyser.network.outdated.server", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
-                return true;
-            }
-
-            if (loginPacket.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
-                geyserSession.disconnect(LanguageUtils.getLocaleStringLog("geyser.network.outdated.client", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
-                return true;
-            }
-        }
-
-        // Provide some debug about our translation chain
-        Translator translator = serverSession.getTranslator();
-        if (translator != null) {
-            GeyserReversionExtension.getInstance().getLogger().debug("Translator Chain:");
-            while (translator != null) {
-                GeyserReversionExtension.getInstance().getLogger().debug("  " + translator);
-                translator = translator.getDownstreamTranslator();
-            }
-        }
-
-        // Encrypt Connection
-        serverSession.enableEncryption(serverSession.getLoginData().getEncryptionKey());
-
-        try {
-            ServerToClientHandshakePacket packet = new ServerToClientHandshakePacket();
-            packet.setJwt(serverSession.getLoginData().getHandshakeJwt().serialize());
-            geyserSession.sendUpstreamPacketImmediately(packet);
-        } catch (LoginException e) {
-            geyserSession.disconnect("You are not able to connect. Please make sure your account is authorized to connect or contact the server administrator.");
-            geyserSession.getConnector().getLogger().error("Failed to encrypt connection: " + e.getMessage());
-            return true;
-        }
-
-        // Setup Session
-        JsonNode extraData = serverSession.getLoginData().getPayload().get("extraData");
-        geyserSession.setAuthenticationData(new AuthData(
-                extraData.get("displayName").asText(),
-                UUID.fromString(extraData.get("identity").asText()),
-                extraData.get("XUID").asText()
-        ));
-
-        serverSession.getLoginData();
-        geyserSession.setClientData(LoginData.JSON_MAPPER.convertValue(serverSession.getLoginData().getClientData(), BedrockClientData.class));
-
-        PlayStatusPacket playStatus = new PlayStatusPacket();
-        playStatus.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-        geyserSession.sendUpstreamPacket(playStatus);
-
-        ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
-        geyserSession.sendUpstreamPacket(resourcePacksInfo);
-        return true;
-    }
-
     public boolean handlePacket(BedrockPacket original) {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
@@ -132,6 +58,21 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
         buffer.release();
 
         return translated.handle(facadeSession.getPacketHandler());
+    }
+
+    @Override
+    public boolean handle(LoginPacket packet) {
+        return handlePacket(packet);
+    }
+
+    @Override
+    public boolean handle(MotionPredictionHintsPacket packet) {
+        return handlePacket(packet);
+    }
+
+    @Override
+    public boolean handle(ItemComponentPacket packet) {
+        return handlePacket(packet);
     }
 
     @Override
