@@ -45,6 +45,8 @@ import org.geysermc.connector.network.session.GeyserSession;
 import org.geysermc.connector.network.session.auth.AuthData;
 import org.geysermc.connector.network.session.auth.BedrockClientData;
 import org.geysermc.connector.utils.LanguageUtils;
+import org.geysermc.connector.utils.ResourcePack;
+import org.geysermc.connector.utils.ResourcePackManifest;
 
 import java.util.UUID;
 
@@ -64,15 +66,18 @@ public class GeyserUpstreamPacketHandler extends UpstreamPacketHandler {
             return true;
         }
 
+        loginPacket = result.getEvent().getPacket();
+
         // Check that we support the codec
         BedrockPacketCodec packetCodec = BedrockProtocol.getBedrockCodec(loginPacket.getProtocolVersion());
         if (packetCodec == null) {
             if (loginPacket.getProtocolVersion() > BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+                // Too early to determine session locale
+                session.getConnector().getLogger().info(LanguageUtils.getLocaleStringLog("geyser.network.outdated.server", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
                 session.disconnect(LanguageUtils.getLocaleStringLog("geyser.network.outdated.server", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
                 return true;
-            }
-
-            if (loginPacket.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+            } else if (loginPacket.getProtocolVersion() < BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion()) {
+                session.getConnector().getLogger().info(LanguageUtils.getLocaleStringLog("geyser.network.outdated.client", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
                 session.disconnect(LanguageUtils.getLocaleStringLog("geyser.network.outdated.client", BedrockProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()));
                 return true;
             }
@@ -117,6 +122,11 @@ public class GeyserUpstreamPacketHandler extends UpstreamPacketHandler {
         session.sendUpstreamPacket(playStatus);
 
         ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
+        for (ResourcePack resourcePack : ResourcePack.PACKS.values()) {
+            ResourcePackManifest.Header header = resourcePack.getManifest().getHeader();
+            resourcePacksInfo.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(header.getUuid().toString(), header.getVersionString(), resourcePack.getFile().length(), "", "", "", false));
+        }
+        resourcePacksInfo.setForcedToAccept(GeyserConnector.getInstance().getConfig().isForceResourcePacks());
         session.sendUpstreamPacket(resourcePacksInfo);
         return true;
     }
