@@ -16,19 +16,17 @@ versions.
 
 ### Minecraft Bedrock
 * Minecraft Bedrock v1.16.2
-* Minecraft Bedrock v1.16.100.50 (beta)
-* Minecraft Bedrock v1.16.100.52 (beta)
-* Minecraft Bedrock v1.16.100.53 (beta)
-* Minecraft Bedrock v1.16.100.55 (beta)
-* Minecraft Bedrock v1.16.100.56 (beta)
-* Minecraft Bedrock v1.16.100.57 (beta)
+* Minecraft Bedrock v1.16.3
+* Minecraft Bedrock v1.16.4
 
 ### Minecraft Education
 * Minecraft Education v1.14.31
+* Minecraft Education v1.14.50
 
-## Server Versions Support
-* Geyser Bedrock v1.16.2
-* Geyser Bedrock v1.16.100.56 (beta)
+## Server Versions Supported
+* Minecraft Bedrock v1.16.2
+* Minecraft Bedrock v1.16.3
+* Minecraft Bedrock v1.16.4
 
 ## Quick Start
 

@@ -57,9 +57,8 @@ public class GeyserServerSession extends BedrockServerSession {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
         BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
-
         reversionSession.sendPacket(translated);
     }
 
@@ -69,7 +68,7 @@ public class GeyserServerSession extends BedrockServerSession {
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
         BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()));
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
 
         reversionSession.sendPacketImmediately(translated);
