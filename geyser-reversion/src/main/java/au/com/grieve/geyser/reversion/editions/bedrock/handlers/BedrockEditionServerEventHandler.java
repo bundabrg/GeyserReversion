@@ -26,6 +26,7 @@ package au.com.grieve.geyser.reversion.editions.bedrock.handlers;
 
 import au.com.grieve.geyser.reversion.GeyserReversionExtension;
 import au.com.grieve.geyser.reversion.server.GeyserServerSession;
+import au.com.grieve.geyser.reversion.server.GeyserUpstreamPacketHandler;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionSession;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPong;
 import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockServerEventHandler;
@@ -34,7 +35,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import lombok.Getter;
 import org.geysermc.connector.GeyserConnector;
-import org.geysermc.connector.network.UpstreamPacketHandler;
 import org.geysermc.connector.network.session.GeyserSession;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -83,7 +83,7 @@ public class BedrockEditionServerEventHandler implements BedrockServerEventHandl
         GeyserServerSession facadeSession = new GeyserServerSession((BedrockReversionSession) bedrockServerSession);
         GeyserSession geyserSession = new GeyserSession(GeyserConnector.getInstance(), facadeSession);
 
-        facadeSession.setPacketHandler(new UpstreamPacketHandler(GeyserConnector.getInstance(), geyserSession));
+        facadeSession.setPacketHandler(new GeyserUpstreamPacketHandler((BedrockReversionSession) bedrockServerSession, GeyserConnector.getInstance(), geyserSession));
         bedrockServerSession.setPacketHandler(new BedrockEditionUpstreamPacketHandler((BedrockReversionSession) bedrockServerSession,
                 geyserSession, facadeSession));
     }
