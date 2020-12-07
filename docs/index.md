@@ -15,6 +15,7 @@ versions.
 ## Client Versions Supported
 
 ### Minecraft Bedrock
+* Minecraft Bedrock v1.16.0
 * Minecraft Bedrock v1.16.2
 * Minecraft Bedrock v1.16.3
 * Minecraft Bedrock v1.16.100
