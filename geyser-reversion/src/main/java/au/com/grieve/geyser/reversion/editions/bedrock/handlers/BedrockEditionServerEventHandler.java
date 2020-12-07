@@ -69,6 +69,7 @@ public class BedrockEditionServerEventHandler implements BedrockServerEventHandl
         translatedPong.setGameType(originalPong.getGameType());
         translatedPong.setIpv4Port(originalPong.getIpv4Port());
         translatedPong.setIpv6Port(originalPong.getIpv6Port());
+        translatedPong.setPlayerCount(originalPong.getPlayerCount());
         translatedPong.setMaximumPlayerCount(originalPong.getMaximumPlayerCount());
         translatedPong.setMotd(originalPong.getMotd());
         translatedPong.setProtocolVersion(originalPong.getProtocolVersion());
