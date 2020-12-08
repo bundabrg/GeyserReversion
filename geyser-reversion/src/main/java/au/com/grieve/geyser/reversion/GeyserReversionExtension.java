@@ -139,7 +139,7 @@ public class GeyserReversionExtension extends GeyserExtension {
     /**
      * Replace Geyser BedrockServer with one provided by an edition
      */
-    @GeyserEventHandler(priority = EventHandler.PRIORITY.LOW)
+    @GeyserEventHandler(priority = EventHandler.Priority.LOW)
     public void onGeyserStart(GeyserStartEvent event) {
         Edition edition = registeredEditions.get(config.getEdition());
 
