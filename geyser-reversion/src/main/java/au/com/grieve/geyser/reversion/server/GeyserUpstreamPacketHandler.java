@@ -48,6 +48,7 @@ import org.geysermc.connector.utils.LanguageUtils;
 import org.geysermc.connector.utils.ResourcePack;
 import org.geysermc.connector.utils.ResourcePackManifest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 public class GeyserUpstreamPacketHandler extends UpstreamPacketHandler {
@@ -124,7 +125,24 @@ public class GeyserUpstreamPacketHandler extends UpstreamPacketHandler {
         ResourcePacksInfoPacket resourcePacksInfo = new ResourcePacksInfoPacket();
         for (ResourcePack resourcePack : ResourcePack.PACKS.values()) {
             ResourcePackManifest.Header header = resourcePack.getManifest().getHeader();
-            resourcePacksInfo.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(header.getUuid().toString(), header.getVersionString(), resourcePack.getFile().length(), "", "", "", false));
+
+            // ResourcePacksInfoPacket.Entry has an additional and non backwards compatible parameter so we try both ways
+            ResourcePacksInfoPacket.Entry resourceEntry;
+
+            try {
+                resourceEntry = ResourcePacksInfoPacket.Entry.class.getConstructor(String.class, String.class, long.class, String.class, String.class, String.class, boolean.class, boolean.class)
+                        .newInstance(header.getUuid().toString(), header.getVersionString(), resourcePack.getFile().length(), "", "", "", false, false);
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+
+                try {
+                    resourceEntry = ResourcePacksInfoPacket.Entry.class.getConstructor(String.class, String.class, long.class, String.class, String.class, String.class, boolean.class)
+                            .newInstance(header.getUuid().toString(), header.getVersionString(), resourcePack.getFile().length(), "", "", "", false);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e2) {
+                    throw new RuntimeException(e2);
+                }
+            }
+
+            resourcePacksInfo.getResourcePackInfos().add(resourceEntry);
         }
         resourcePacksInfo.setForcedToAccept(GeyserConnector.getInstance().getConfig().isForceResourcePacks());
         session.sendUpstreamPacket(resourcePacksInfo);
