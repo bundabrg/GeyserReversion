@@ -24,12 +24,15 @@
 
 package au.com.grieve.geyser.reversion.server;
 
+import au.com.grieve.reversion.Build;
 import au.com.grieve.reversion.editions.bedrock.BedrockReversionSession;
 import com.nukkitx.network.util.DisconnectReason;
 import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import lombok.Getter;
 import org.geysermc.connector.network.BedrockProtocol;
 
 import javax.annotation.Nonnull;
@@ -37,18 +40,28 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.crypto.SecretKey;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+@Getter
 @ParametersAreNonnullByDefault
 public class GeyserServerSession extends BedrockServerSession {
     protected final BedrockReversionSession reversionSession;
+
+    BedrockPacketCodec originalCodec;
+    au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacketCodec translatedCodec;
 
     public GeyserServerSession(BedrockReversionSession reversionSession) {
         super(null, null, null);
 
         this.reversionSession = reversionSession;
 
+        originalCodec = BedrockProtocol.DEFAULT_BEDROCK_CODEC;
+        translatedCodec = Arrays.stream(Build.PROTOCOLS)
+                .filter(c -> c.getProtocolVersion() == originalCodec.getProtocolVersion())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
     }
 
     @Override
@@ -56,8 +69,8 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
-        BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
+        originalCodec.tryEncode(buffer, original);
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = translatedCodec.tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
         reversionSession.sendPacket(translated);
     }
@@ -67,8 +80,8 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
-        BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryEncode(buffer, original);
-        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = reversionSession.getServer().getToCodec().tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
+        originalCodec.tryEncode(buffer, original);
+        au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = translatedCodec.tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
 
         reversionSession.sendPacketImmediately(translated);

@@ -44,6 +44,8 @@ import org.geysermc.connector.network.BedrockProtocol;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class EducationEdition implements Edition {
@@ -70,12 +72,18 @@ public class EducationEdition implements Edition {
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("EducationServer listening on " + address.toString());
 
-        BedrockPacketCodec defaultCodec = Arrays.stream(Build.PROTOCOLS)
-                .filter(p -> p.getProtocolVersion() == BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
+        Set<BedrockPacketCodec> supportedCodecs = BedrockProtocol.SUPPORTED_BEDROCK_CODECS.stream()
+                .map(c -> Arrays.stream(Build.PROTOCOLS)
+                        .filter(b -> c.getProtocolVersion() == b.getProtocolVersion())
+                        .findFirst()
+                        .orElse(null))
+                .collect(Collectors.toSet());
 
-        EducationReversionServer server = new EducationReversionServer(defaultCodec, tokenManager, address);
+        if (supportedCodecs.size() == 0) {
+            throw new RuntimeException("Unsupported Geyser");
+        }
+
+        EducationReversionServer server = new EducationReversionServer(supportedCodecs, tokenManager, address);
         server.setHandler(new BedrockEditionServerEventHandler(extension));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {

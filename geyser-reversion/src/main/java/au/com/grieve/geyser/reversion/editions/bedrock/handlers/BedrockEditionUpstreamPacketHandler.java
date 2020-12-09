@@ -32,7 +32,6 @@ import au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.packet.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import lombok.Getter;
-import org.geysermc.connector.network.BedrockProtocol;
 import org.geysermc.connector.network.session.GeyserSession;
 
 
@@ -52,8 +51,8 @@ public class BedrockEditionUpstreamPacketHandler implements BedrockPacketHandler
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
-        serverSession.getServer().getToCodec().tryEncode(buffer, original, serverSession);
-        com.nukkitx.protocol.bedrock.BedrockPacket translated = BedrockProtocol.DEFAULT_BEDROCK_CODEC.tryDecode(buffer, serverSession.getServer().getToCodec().getId(original.getClass()));
+        facadeSession.getTranslatedCodec().tryEncode(buffer, original, serverSession);
+        com.nukkitx.protocol.bedrock.BedrockPacket translated = facadeSession.getOriginalCodec().tryDecode(buffer, facadeSession.getTranslatedCodec().getId(original.getClass()));
 
         buffer.release();
 

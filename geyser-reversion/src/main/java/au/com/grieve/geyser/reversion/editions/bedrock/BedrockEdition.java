@@ -38,6 +38,9 @@ import org.geysermc.connector.network.BedrockProtocol;
 
 import java.net.InetSocketAddress;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class BedrockEdition implements Edition {
@@ -47,12 +50,19 @@ public class BedrockEdition implements Edition {
     public ReversionServer createReversionServer(InetSocketAddress address) {
         extension.getLogger().info("BedrockServer listening on " + address.toString());
 
-        BedrockPacketCodec defaultCodec = Arrays.stream(Build.PROTOCOLS)
-                .filter(p -> p.getProtocolVersion() == BedrockProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Unsupported Geyser"));
+        Set<BedrockPacketCodec> supportedCodecs = BedrockProtocol.SUPPORTED_BEDROCK_CODECS.stream()
+                .map(c -> Arrays.stream(Build.PROTOCOLS)
+                        .filter(b -> c.getProtocolVersion() == b.getProtocolVersion())
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
-        BedrockReversionServer server = new BedrockReversionServer(defaultCodec, address);
+        if (supportedCodecs.size() == 0) {
+            throw new RuntimeException("Unsupported Geyser");
+        }
+
+        BedrockReversionServer server = new BedrockReversionServer(supportedCodecs, address);
         server.setHandler(new BedrockEditionServerEventHandler(extension));
 
         for (RegisteredTranslator translator : extension.getRegisteredTranslators()) {
