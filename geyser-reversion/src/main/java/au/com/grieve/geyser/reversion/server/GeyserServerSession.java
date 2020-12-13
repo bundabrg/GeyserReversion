@@ -39,6 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.crypto.SecretKey;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,6 +52,8 @@ public class GeyserServerSession extends BedrockServerSession {
 
     BedrockPacketCodec originalCodec;
     au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacketCodec translatedCodec;
+
+    private Method tryEncode;
 
     public GeyserServerSession(BedrockReversionSession reversionSession) {
         super(null, null, null);
@@ -69,7 +72,7 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
-        originalCodec.tryEncode(buffer, original);
+        originalCodec.tryEncode(buffer, original, this);
         au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = translatedCodec.tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
         reversionSession.sendPacket(translated);
@@ -80,7 +83,7 @@ public class GeyserServerSession extends BedrockServerSession {
         // Isolate Reversion protocol from Geyser Protocol in case there are overlapping differences
         ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
 
-        originalCodec.tryEncode(buffer, original);
+        originalCodec.tryEncode(buffer, original, this);
         au.com.grieve.reversion.shaded.nukkitx.protocol.bedrock.BedrockPacket translated = translatedCodec.tryDecode(buffer, BedrockProtocol.DEFAULT_BEDROCK_CODEC.getId(original.getClass()), reversionSession);
         buffer.release();
 
