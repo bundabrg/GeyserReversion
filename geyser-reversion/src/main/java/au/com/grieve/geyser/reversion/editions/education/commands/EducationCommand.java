@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 GeyserReversion Developers
+ * Copyright (c) 2021 GeyserReversion Developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,9 @@ import au.com.grieve.reversion.editions.education.utils.TokenManager;
 import org.geysermc.connector.command.CommandSender;
 import org.geysermc.connector.command.GeyserCommand;
 import org.geysermc.connector.common.ChatColor;
+import org.geysermc.connector.network.session.GeyserSession;
+
+import javax.annotation.Nullable;
 
 public class EducationCommand extends GeyserCommand {
 
@@ -50,7 +53,7 @@ public class EducationCommand extends GeyserCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(@Nullable GeyserSession geyserSession, CommandSender sender, String[] args) {
         if (!sender.isConsole()) {
             return;
         }
@@ -82,4 +85,5 @@ public class EducationCommand extends GeyserCommand {
                 showHelp(sender);
         }
     }
+
 }
