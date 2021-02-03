@@ -8,10 +8,10 @@ at the same time.
 
 ## Generating a Token
 
-To generate a token you will need to enter the following geyser command:
+To generate a token you will need to enter the following geyser command into the server console, not the in-game chat:
 
 ```
-/geyser education new
+geyser education new
 ```
 
 This will provide a URL that a user in the tenancy must open in their browser (any user in the tenancy is fine). This will allow them to log into
@@ -19,7 +19,7 @@ Microsoft as usual. They will end up with a white screen and a long address in t
 to be copied. Then enter the following geyser command:
 
 ```
-/geyser education confirm {copied address}
+geyser education confirm {copied address}
 ```
 
 This will generate the appropriate token. This token only allows the server access to the minecraft part of the account
@@ -27,6 +27,8 @@ and if the user ever changes their Microsoft password the token will no longer b
 tenancy will be able to connect.
 
 ## Notes
+
+TCP must also be portforwarded to be able to connect with Minecraft Education.
 
 Minecraft Education uses the Tenancy username as the player username. This can cause collisions, so you may
 wish to additionally use [GeyserLogin](https://github.com/bundabrg/GeyserLogin/releases) to provide a login screen
