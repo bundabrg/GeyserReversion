@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2020 GeyserReversion Developers
+  ~ Copyright (c) 2021 GeyserReversion Developers
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reversion.version>1.0.23</reversion.version>
+        <reversion.version>1.0.24</reversion.version>
     </properties>
 
     <build>
