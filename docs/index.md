@@ -45,5 +45,16 @@ where your Geyser.jar file is located.
     [11:08:37 DEBUG] {GeyserReversion} Registered Translator: Translator_v390ee_to_v408be
     ```
 
-4. If using `education` you will need to generate a token for each tenancy that you support otherwise you'll get a 
-"School not allowed" error. See [education docs](education.md) for more info
+4. If using `education` you will need to generate a token for each tenancy that you support otherwise you'll get a
+   "School not allowed" error. See [education docs](education.md) for more info
+
+## Donations
+
+As this is an open source project it is free to use and free to modify. If you do wish to donate then you may use the
+following link with all funds going into my "Evening Fund".
+
+The Evening Fund is a fund I (bundabrg) have set up for all my open source projects. Anything sent there will be used to
+help others. I appreciate your contribution, and I thank you for giving me the ability to bring some happiness to others
+as well.
+
+* Bitcoin: `bc1q0twm860q6qtr4aaje4xqaft2zumsxdh37k04u5`
