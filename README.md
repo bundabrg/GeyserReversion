@@ -80,3 +80,5 @@ help others. I appreciate your contribution, and I thank you for giving me the a
 as well.
 
 * Bitcoin: `bc1q0twm860q6qtr4aaje4xqaft2zumsxdh37k04u5`
+* Dogecoin: `DJspj5eK7ZjbDdPjVf1qZUGi3e8Gao79xT`
+* Litecoin: `ltc1q23yqxgwn60rjlwdhpnwtzjyk9rw3rmmzy4qm3x`
