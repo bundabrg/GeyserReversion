@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 GeyserReversion Developers
+ * Copyright (c) 2021 GeyserReversion Developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -173,6 +173,11 @@ public class GeyserServerSession extends BedrockServerSession {
     @Override
     public void addDisconnectHandler(Consumer<DisconnectReason> disconnectHandler) {
         reversionSession.addDisconnectHandler(disconnectHandler);
+    }
+
+    @Override
+    public InetSocketAddress getRealAddress() {
+        return reversionSession.getAddress();
     }
 
     @Override

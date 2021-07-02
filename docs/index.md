@@ -23,6 +23,7 @@ versions.
 ### Minecraft Education
 * Minecraft Education v1.14.31
 * Minecraft Education v1.14.50
+* Minecraft Education v1.14.70
 
 ## Server Versions Supported
 * Minecraft Bedrock v1.16.2

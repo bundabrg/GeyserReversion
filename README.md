@@ -12,7 +12,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/Bundabrg/GeyserReversion)](https://GitHub.com/Bundabrg/GeyserReversion/issues/)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Bundabrg/GeyserReversion.svg)](http://isitmaintained.com/project/Bundabrg/GeyserReversion "Average time to resolve an issue")
 [![GitHub pull-requests](https://img.shields.io/github/issues-pr/Bundabrg/GeyserReversion)](https://GitHub.com/Bundabrg/GeyserReversion/pull/)
- 
+
 
 ---
 
@@ -22,12 +22,19 @@
 
 ---
 
-GeyserReversion is a Geyser Extension that provides protocol level support for MultiVersion in Geyser and will eventually
-allow any supported version to connect to any supported Geyser.
+PLEASE NOTE: At present this only works
+with [Geyser v1.16-b55](https://github.com/bundabrg/Geyser/releases/tag/v1.16-b55) until I manage to finish translating
+between server and non-server inventory management. So please use this version for Education (as long as you run
+ViaVersion on your java server it will accept the older connections).
 
-If you've heard of [ViaVersion](https://github.com/ViaVersion/ViaVersion) then this is the equivalent but for the Bedrock
-side of Geyser. It allows any of the supported client versions listed below to connect to any of the supported server
-versions.
+---
+
+GeyserReversion is a Geyser Extension that provides protocol level support for MultiVersion in Geyser and will
+eventually allow any supported version to connect to any supported Geyser.
+
+If you've heard of [ViaVersion](https://github.com/ViaVersion/ViaVersion) then this is the equivalent but for the
+Bedrock side of Geyser. It allows any of the supported client versions listed below to connect to any of the supported
+server versions.
 
 ## Features
 
@@ -37,6 +44,7 @@ versions.
 ## Client Versions Supported
 
 ### Minecraft Bedrock
+
 * Minecraft Bedrock v1.16.0
 * Minecraft Bedrock v1.16.2
 * Minecraft Bedrock v1.16.3
@@ -45,6 +53,7 @@ versions.
 ### Minecraft Education
 * Minecraft Education v1.14.31
 * Minecraft Education v1.14.50
+* Minecraft Education v1.14.70
 
 ## Server Versions Supported
 * Minecraft Bedrock v1.16.2
