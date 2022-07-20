@@ -7,7 +7,7 @@
 <!-- ![HitCount](http://hits.dwyl.com/bundabrg/GeyserReversion.svg) -->
 
 ![Workflow](https://github.com/bundabrg/GeyserReversion/workflows/build/badge.svg)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Bundabrg/GeyserReversion/graphs/commit-activity)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-no-red.svg)](https://GitHub.com/Bundabrg/GeyserReversion/graphs/commit-activity)
 [![GitHub contributors](https://img.shields.io/github/contributors/Bundabrg/GeyserReversion)](https://GitHub.com/Bundabrg/GeyserReversion/graphs/contributors/)
 [![GitHub issues](https://img.shields.io/github/issues/Bundabrg/GeyserReversion)](https://GitHub.com/Bundabrg/GeyserReversion/issues/)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Bundabrg/GeyserReversion.svg)](http://isitmaintained.com/project/Bundabrg/GeyserReversion "Average time to resolve an issue")
@@ -22,10 +22,10 @@
 
 ---
 
-PLEASE NOTE: At present this only works
-with [Geyser v1.16-b55](https://github.com/bundabrg/Geyser/releases/tag/v1.16-b55) until I manage to finish translating
-between server and non-server inventory management. So please use this version for Education (as long as you run
-ViaVersion on your java server it will accept the older connections).
+PLEASE NOTE: As of 20/07/2022 this project is no longer being maintained as the extension interface was
+not accepted upstream and it was too hard to maintain updates. I will be working on a proxy that will sit in front
+of a bedrock server (be it Geyser or vanilla) and provide the same translation
+of versions and a plugin interface. I'll update this notification once I have something up.
 
 ---
 
